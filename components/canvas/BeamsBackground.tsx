@@ -23,12 +23,13 @@ export default function BeamsBackground() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    const count = beamsRef.current.length;
     beamsRef.current.forEach((beam, i) => {
       beam.y -= beam.speed;
       beam.pulse += beam.pulseSpeed;
 
       if (beam.y + beam.length < -100) {
-        resetBeam(beam, i, BEAM_COUNT, w, h);
+        resetBeam(beam, i, count, w, h);
       }
 
       ctx.save();
@@ -64,15 +65,16 @@ export default function BeamsBackground() {
 
     const dpr = window.devicePixelRatio || 1;
     const { offsetWidth: w, offsetHeight: h } = container;
+    const isMobile = window.innerWidth < 768;
+    const count = isMobile ? 10 : BEAM_COUNT;
 
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     canvas.style.width = `${w}px`;
     canvas.style.height = `${h}px`;
     ctx.scale(dpr, dpr);
-    ctx.filter = "blur(28px)";
 
-    beamsRef.current = Array.from({ length: BEAM_COUNT }, () =>
+    beamsRef.current = Array.from({ length: count }, () =>
       createBeam(w, h)
     );
 
@@ -106,7 +108,7 @@ export default function BeamsBackground() {
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">
-      <canvas ref={canvasRef} className="absolute inset-0" />
+      <canvas ref={canvasRef} className="absolute inset-0" style={{ filter: "blur(28px)" }} />
       {/* Vignette overlay */}
       <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-[var(--bg-surface)] pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-surface)] via-transparent to-[var(--bg-surface)] opacity-60 pointer-events-none" />

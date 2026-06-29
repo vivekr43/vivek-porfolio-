@@ -373,7 +373,8 @@ export default function HeroScene({ effectOptions = DEFAULT_EFFECT_OPTIONS }) {
         this.webglSupported = true;
 
         this.renderer.setSize(initW, initH, false);
-        this.renderer.setPixelRatio(window.devicePixelRatio);
+        const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+        this.renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 1.2) : Math.min(window.devicePixelRatio, 2));
         this.composer = new EffectComposer(this.renderer);
         container.append(this.renderer.domElement);
 
@@ -625,7 +626,12 @@ export default function HeroScene({ effectOptions = DEFAULT_EFFECT_OPTIONS }) {
 
       render(delta) {
         if (!this.webglSupported) return;
-        this.composer.render(delta);
+        const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+        if (isMobile) {
+          this.renderer.render(this.scene, this.camera);
+        } else {
+          this.composer.render(delta);
+        }
       }
 
       dispose() {

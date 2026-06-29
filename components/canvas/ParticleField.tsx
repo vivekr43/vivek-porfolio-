@@ -30,13 +30,16 @@ export default function ParticleField() {
 
     const setup = () => {
       const dpr = window.devicePixelRatio || 1;
+      const isMobile = window.innerWidth < 768;
+      const count = isMobile ? 35 : COUNT;
+
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       canvas.style.width = `${window.innerWidth}px`;
       canvas.style.height = `${window.innerHeight}px`;
       ctx.scale(dpr, dpr);
 
-      particlesRef.current = Array.from({ length: COUNT }, () => ({
+      particlesRef.current = Array.from({ length: count }, () => ({
         x: Math.random() * window.innerWidth,
         y: Math.random() * window.innerHeight,
         z: Math.random(),
@@ -52,6 +55,7 @@ export default function ParticleField() {
 
     const draw = () => {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      const isMobile = window.innerWidth < 768;
 
       particlesRef.current.forEach((p) => {
         p.x += p.speedX;
@@ -69,15 +73,22 @@ export default function ParticleField() {
         const alpha = p.opacity * (0.7 + Math.sin(p.pulse) * 0.3) * screenScale;
         const size = p.size * screenScale;
 
-        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 3);
-        grad.addColorStop(0, `rgba(201, 169, 110, ${alpha})`);
-        grad.addColorStop(0.5, `rgba(120, 80, 200, ${alpha * 0.3})`);
-        grad.addColorStop(1, `rgba(201, 169, 110, 0)`);
+        if (isMobile) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(201, 169, 110, ${alpha * 1.5})`;
+          ctx.fill();
+        } else {
+          const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 3);
+          grad.addColorStop(0, `rgba(201, 169, 110, ${alpha})`);
+          grad.addColorStop(0.5, `rgba(120, 80, 200, ${alpha * 0.3})`);
+          grad.addColorStop(1, `rgba(201, 169, 110, 0)`);
 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, size * 3, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
-        ctx.fill();
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, size * 3, 0, Math.PI * 2);
+          ctx.fillStyle = grad;
+          ctx.fill();
+        }
       });
 
       animRef.current = requestAnimationFrame(draw);
