@@ -39,7 +39,9 @@ export default function NavBar() {
     setMenuOpen(false);
     const target = document.querySelector(href);
     if (target) {
-      const top = target.getBoundingClientRect().top + window.scrollY - 64;
+      const computedStyle = window.getComputedStyle(target);
+      const paddingTop = parseInt(computedStyle.paddingTop) || 0;
+      const top = target.getBoundingClientRect().top + window.scrollY + paddingTop - 104;
       window.scrollTo({ top, behavior: "smooth" });
     }
   };
