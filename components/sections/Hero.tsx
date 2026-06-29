@@ -99,8 +99,7 @@ export default function Hero() {
               &quot;Small team of one. Full-stack output.&quot;
             </p>
             <p className="text-[14.5px] text-[var(--text-secondary)] leading-[1.7] max-w-[520px] mx-auto">
-              Co-Founder of ReferUp and Computer Science student building web apps, browser extensions, and AI-powered
-              tools end-to-end. Comfortable working solo from a blank repo to a shipped product. Currently looking for SDE / Software Engineering internships.
+              Comfortable working solo from a blank repo to a shipped product. Currently looking for SDE / Software Engineering internships.
             </p>
           </BorderGlow>
         </SectionReveal>

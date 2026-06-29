@@ -38,6 +38,9 @@ export const metadata: Metadata = {
     title: "Vivek Ribadiya — CS Student & AI Builder",
     description: "Building things with AI before fully knowing how.",
   },
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
